@@ -2,6 +2,8 @@
 
 Adds (experimental) iTerm2 Mac touchbar support to `vim` and `neovim`.
 
+**This uses a feature exclusive to [iTerm2](https://iterm2.com/). It will not work with the Apple Terminal.app.**
+
 
 
 ## Installation
