@@ -17,7 +17,7 @@ function! it2touchbar#WriteTTY(message)
 	setlocal binary
 	setlocal nofixendofline
 	call setline(1, a:message)
-	execute 'w >>' '/dev/tty'
+	execute 'w >>' '/dev/ttys000'
 	q
 endfunction
 
