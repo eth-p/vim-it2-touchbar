@@ -6,19 +6,12 @@ if !exists('g:loaded_it2touchbar')
 	finish
 endif
 
-" Writes directly to the terminal.
+" Writes directly to the 'stdout' file descriptor.
 " This is necessary to send ANSI escape sequence.
 "
 " Note: This may reset the mode to normal.
-function! it2touchbar#WriteTTY(message)
-	new
-	setlocal buftype=nofile bufhidden=hide noswapfile nobuflisted
-	setlocal noeol
-	setlocal binary
-	setlocal nofixendofline
-	call setline(1, a:message)
-	execute 'w >>' '/dev/fd/1'
-	q
+function! it2touchbar#WriteStdout(message)
+	call writefile([a:message], '/dev/fd/1', "ba")
 endfunction
 
 " Functions for manipulating the touch bar.
@@ -26,16 +19,16 @@ let s:key_label_cache = {}
 function! it2touchbar#SetTouchBarKey(key, value)
 	if !has_key(s:key_label_cache, a:key) || s:key_label_cache[a:key] != a:value
 		let s:key_label_cache[a:key] = a:value
-		silent call it2touchbar#WriteTTY(']1337;SetKeyLabel='.a:key.'='.a:value.'')
+		silent call it2touchbar#WriteStdout(']1337;SetKeyLabel='.a:key.'='.a:value.'')
 	endif
 endfunction
 
 function! it2touchbar#PushKeys(label)
-	silent call it2touchbar#WriteTTY(']1337;PushKeyLabels='.a:label.'')
+	silent call it2touchbar#WriteStdout(']1337;PushKeyLabels='.a:label.'')
 endfunction
 
 function! it2touchbar#PopKeys(label)
-	silent call it2touchbar#WriteTTY(']1337;PopKeyLabels='.a:label.'')
+	silent call it2touchbar#WriteStdout(']1337;PopKeyLabels='.a:label.'')
 endfunction
 
 " Function to regenerate the touchbar keys.
